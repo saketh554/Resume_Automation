@@ -16,7 +16,7 @@ def parse_resume_node(state: GraphState) -> GraphState:
 
 
 def parse_jd_node(state: GraphState) -> GraphState:
-    from backend.services.jd_parser import parse_jd_fallback
+    from backend.services.jd_parser import parse_jd
 
     next_state = state.model_copy(deep=True)
     jd_text = next_state.jd_text.strip()
@@ -25,7 +25,10 @@ def parse_jd_node(state: GraphState) -> GraphState:
         return next_state
 
     try:
-        next_state.jd_struct = parse_jd_fallback(jd_text)
+        jd_struct, parse_source = parse_jd(jd_text)
+        next_state.jd_struct = jd_struct
+        if parse_source == "fallback":
+            next_state.errors.append("parse_jd warning: using fallback parser.")
     except Exception as exc:  # noqa: BLE001
         next_state.errors.append(f"parse_jd failed: {exc}")
     return next_state

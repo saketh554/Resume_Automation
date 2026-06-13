@@ -34,10 +34,31 @@
 - [x] Implemented `parse_jd` node with structured `JDStruct` output.
 - [x] Added linear LangGraph wiring for Part 2 (`parse_resume -> parse_jd`).
 - [x] Added graceful error handling for missing/corrupt/empty resume inputs.
+- [x] Upgraded `parse_jd` to OpenAI structured output (`JDStruct`) with fallback parser backup.
 
 ### Verification
 
 - [x] Sample `.docx` parses into contact block, sections, projects/bullets, skills, education.
 - [x] JD text parses into required skills vs nice-to-have skills.
 - [x] Corrupt `.docx` is handled gracefully (`parse_resume failed` error, no crash).
-- [x] `uv run pytest -q` passes (`4 passed`).
+- [x] LLM parse path and fallback parse path both covered by tests.
+- [x] `uv run pytest -q` passes (`7 passed`).
+
+## Part 3 - Alignment + gap analysis (LangGraph nodes 3-6)
+
+- [x] Implemented `analyze_alignment` with deterministic weighted formula:
+      `covered_required * 0.7 + covered_nice * 0.3`, normalized to percentage.
+- [x] Implemented `write_gap_bullets`: one bullet per missing skill with explicit `[X]%` placeholder.
+- [x] Implemented `map_to_projects`: each missing skill/bullet mapped to at least one project with rationale.
+- [x] Implemented `audit_projects`: flags generic/off-target points in project/experience sections only.
+- [x] Extended shared `GraphState` with typed Part 3 outputs (`AlignmentResult`, `GapBullet`,
+      `ProjectMapping`, `ProjectAuditItem`).
+- [x] Wired graph linearly through Part 3 nodes.
+
+### Verification
+
+- [x] Alignment % is reproducible and matches the documented formula.
+- [x] Every missing skill gets exactly one bullet and at least one mapped project.
+- [x] Audit never flags contact/header block (project/experience sections only).
+- [x] Bullets use explicit `[X]%` placeholders (no fabricated concrete metrics).
+- [x] `uv run pytest -q` passes (`10 passed`).

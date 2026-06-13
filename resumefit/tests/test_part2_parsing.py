@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
+from unittest.mock import patch
 
 from docx import Document
 
 from backend.agents.graph import build_part2_graph
+from backend.agents.nodes_part2 import parse_jd_node
+from backend.agents.schemas import JDStruct
 from backend.agents.schemas import GraphState
 
 
@@ -39,7 +42,7 @@ def test_parse_resume_and_jd_into_shared_state(tmp_path: Path) -> None:
     graph = build_part2_graph()
     result = graph.invoke(state)
 
-    assert result["errors"] == []
+    assert not [error for error in result["errors"] if "failed" in error]
     assert result["resume_struct"] is not None
     assert result["jd_struct"] is not None
 
@@ -64,3 +67,14 @@ def test_corrupt_resume_is_handled_gracefully(tmp_path: Path) -> None:
 
     assert result.get("resume_struct") is None
     assert any("parse_resume failed" in err for err in result["errors"])
+
+
+def test_parse_jd_node_adds_warning_when_fallback_used() -> None:
+    state = GraphState(resume_path="", jd_text="Requirements: Python")
+    fake_struct = JDStruct(required_skills=["Python"])
+
+    with patch("backend.services.jd_parser.parse_jd", return_value=(fake_struct, "fallback")):
+        updated = parse_jd_node(state)
+
+    assert updated.jd_struct is not None
+    assert any("fallback parser" in err for err in updated.errors)

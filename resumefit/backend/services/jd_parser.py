@@ -1,8 +1,18 @@
 from __future__ import annotations
 
 import re
+from typing import Any
+
+from openai import OpenAI
 
 from backend.agents.schemas import JDStruct
+from backend.app.settings import settings
+
+
+SYSTEM_PROMPT = (
+    "You are an expert recruiter assistant. Extract structured fields from the job description "
+    "without adding facts. If unknown, return empty strings or empty lists."
+)
 
 
 def _dedupe_keep_order(items: list[str]) -> list[str]:
@@ -24,7 +34,6 @@ def parse_jd_fallback(jd_text: str) -> JDStruct:
     """Rule-based fallback parser for local development without API calls."""
     lines = [line.strip() for line in jd_text.splitlines() if line.strip()]
 
-    # Lightweight skill extraction from common tokens.
     known_skills = [
         "python",
         "fastapi",
@@ -87,3 +96,43 @@ def parse_jd_fallback(jd_text: str) -> JDStruct:
         company=company,
         role_title=role_title,
     )
+
+
+def parse_jd_with_llm(jd_text: str) -> JDStruct:
+    """Parse JD text via OpenAI structured output into JDStruct."""
+    if not settings.openai_api_key:
+        raise ValueError("OPENAI_API_KEY is not configured.")
+
+    client = OpenAI(api_key=settings.openai_api_key)
+    response = client.responses.parse(
+        model=settings.model_parsing,
+        input=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": (
+                    "Extract job description data into the provided schema.\n"
+                    "Job Description:\n"
+                    f"{jd_text}"
+                ),
+            },
+        ],
+        text_format=JDStruct,
+    )
+
+    parsed = response.output_parsed
+    if isinstance(parsed, JDStruct):
+        return parsed
+
+    if isinstance(parsed, dict):
+        return JDStruct.model_validate(parsed)
+
+    raise ValueError("OpenAI parser returned an unexpected response format.")
+
+
+def parse_jd(jd_text: str) -> tuple[JDStruct, str]:
+    """Primary parse path with fallback; returns source used."""
+    try:
+        return parse_jd_with_llm(jd_text), "llm"
+    except Exception:
+        return parse_jd_fallback(jd_text), "fallback"

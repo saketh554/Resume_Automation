@@ -33,9 +33,36 @@ class JDStruct(BaseModel):
     role_title: str = ""
 
 
+class AlignmentResult(BaseModel):
+    alignment_pct: float = 0.0
+    matched_skills: list[str] = Field(default_factory=list)
+    missing_skills: list[str] = Field(default_factory=list)
+
+
+class GapBullet(BaseModel):
+    skill: str
+    bullet: str
+
+
+class ProjectMapping(BaseModel):
+    skill: str
+    bullet: str
+    project_names: list[str] = Field(default_factory=list)
+    rationale: str = ""
+
+
+class ProjectAuditItem(BaseModel):
+    project_name: str
+    irrelevant_points: list[str] = Field(default_factory=list)
+
+
 class GraphState(BaseModel):
     resume_path: str = ""
     jd_text: str = ""
     resume_struct: ResumeStruct | None = None
     jd_struct: JDStruct | None = None
+    alignment: AlignmentResult | None = None
+    gap_bullets: list[GapBullet] = Field(default_factory=list)
+    project_mappings: list[ProjectMapping] = Field(default_factory=list)
+    project_audit: list[ProjectAuditItem] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)
