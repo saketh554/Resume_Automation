@@ -1,25 +1,25 @@
-# ResumeFit â€” JD-to-Resume Tailoring Agent
+# ResumeFit — JD-to-Resume Tailoring Agent
 
 A multi-agent (LangGraph) app: paste a job description, compare it against your base resume, get an
 alignment score + gap analysis, and download a format-preserving tailored resume plus a cold email.
 
 ## Status
 
-Part 0 scaffold is in place. The full plan lives in `docs/`:
+Part 1 persistence foundation is in place. The full plan lives in `docs/`:
 
-- `docs/AGENTS.md` â€” constitution: tech decisions, the 8-node agent graph, format/length rules, standards.
-- `docs/BRIEF.md` â€” condensed problem statement, capabilities, deliverables.
-- `docs/PLAN.md` â€” lean part-by-part execution checklist with tests and success criteria.
+- `docs/AGENTS.md` — constitution: tech decisions, the 8-node agent graph, format/length rules, standards.
+- `docs/BRIEF.md` — condensed problem statement, capabilities, deliverables.
+- `docs/PLAN.md` — lean part-by-part execution checklist with tests and success criteria.
 
-## Getting started (with Cursor)
+## Getting started
 
 1. Copy `.env.example` to `.env` and add your `OPENAI_API_KEY`.
 2. Install dependencies with `uv sync`.
 3. Start the API with `uv run uvicorn backend.app.main:app --reload`.
 4. Verify health with `GET /api/health`.
-5. Build part-by-part, committing per verified slice. Follow the build order at the bottom of `docs/PLAN.md`.
+5. Run tests with `uv run pytest -q`.
 
-## Stack (planned)
+## Stack (current)
 
-Python 3.11+ Â· FastAPI Â· LangGraph Â· python-docx Â· SQLite/SQLAlchemy Â· OpenAI (gpt-4o / gpt-4o-mini)
-Â· React + Vite + Tailwind.
+Python 3.11+ · FastAPI · SQLAlchemy · SQLite · LangGraph (planned) · python-docx (planned) · OpenAI
+(gpt-4o / gpt-4o-mini planned) · React + Vite + Tailwind (planned).
