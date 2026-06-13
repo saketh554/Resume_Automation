@@ -25,3 +25,19 @@
 
 - [x] `uv run pytest -q` passes (`2 passed`).
 - [x] Analysis row persists after engine restart in test coverage.
+
+## Part 2 - Resume + JD parsing (LangGraph nodes 1-2)
+
+- [x] Added `ResumeStruct`, `ProjectSection`, `ResumeSection`, and `JDStruct` schemas.
+- [x] Added shared `GraphState` schema for LangGraph node handoff.
+- [x] Implemented `parse_resume` node using `python-docx` parser service.
+- [x] Implemented `parse_jd` node with structured `JDStruct` output.
+- [x] Added linear LangGraph wiring for Part 2 (`parse_resume -> parse_jd`).
+- [x] Added graceful error handling for missing/corrupt/empty resume inputs.
+
+### Verification
+
+- [x] Sample `.docx` parses into contact block, sections, projects/bullets, skills, education.
+- [x] JD text parses into required skills vs nice-to-have skills.
+- [x] Corrupt `.docx` is handled gracefully (`parse_resume failed` error, no crash).
+- [x] `uv run pytest -q` passes (`4 passed`).

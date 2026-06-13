@@ -1,4 +1,4 @@
-# ResumeFit — JD-to-Resume Tailoring Agent
+# ResumeFit - JD-to-Resume Tailoring Agent
 
 A multi-agent (LangGraph) app: paste a job description, compare it against your base resume, get an
 alignment score + gap analysis, and download a format-preserving tailored resume plus a cold email.
@@ -7,9 +7,9 @@ alignment score + gap analysis, and download a format-preserving tailored resume
 
 Part 1 persistence foundation is in place. The full plan lives in `docs/`:
 
-- `docs/AGENTS.md` — constitution: tech decisions, the 8-node agent graph, format/length rules, standards.
-- `docs/BRIEF.md` — condensed problem statement, capabilities, deliverables.
-- `docs/PLAN.md` — lean part-by-part execution checklist with tests and success criteria.
+- `docs/AGENTS.md` - constitution: tech decisions, the 8-node agent graph, format/length rules, standards.
+- `docs/BRIEF.md` - condensed problem statement, capabilities, deliverables.
+- `docs/PLAN.md` - lean part-by-part execution checklist with tests and success criteria.
 
 ## Getting started
 
@@ -21,5 +21,5 @@ Part 1 persistence foundation is in place. The full plan lives in `docs/`:
 
 ## Stack (current)
 
-Python 3.11+ · FastAPI · SQLAlchemy · SQLite · LangGraph (planned) · python-docx (planned) · OpenAI
-(gpt-4o / gpt-4o-mini planned) · React + Vite + Tailwind (planned).
+Python 3.11+, FastAPI, SQLAlchemy, SQLite, LangGraph (planned), python-docx (planned), OpenAI
+(gpt-4o / gpt-4o-mini planned), React + Vite + Tailwind (planned).
