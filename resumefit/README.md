@@ -1,11 +1,11 @@
 # ResumeFit - JD-to-Resume Tailoring Agent
 
 A multi-agent (LangGraph) app: paste a job description, compare it against your base resume, get an
-alignment score + gap analysis, and download a format-preserving tailored resume plus a cold email.
+alignment score plus gap analysis, and download a format-preserving tailored resume plus a cold email.
 
 ## Status
 
-Part 3 analysis foundation is in place. The full plan lives in `docs/`:
+Part 5 backend API wiring is in place. The full plan lives in `docs/`:
 
 - `docs/AGENTS.md` - constitution: tech decisions, the 8-node agent graph, format/length rules, standards.
 - `docs/BRIEF.md` - condensed problem statement, capabilities, deliverables.
@@ -19,10 +19,13 @@ Part 3 analysis foundation is in place. The full plan lives in `docs/`:
 4. Verify health with `GET /api/health`.
 5. Run tests with `uv run pytest -q`.
 
-## Stack (current)
+## API (Part 5)
 
-Python 3.11+, FastAPI, SQLAlchemy, SQLite, LangGraph (planned), python-docx (planned), OpenAI
-(gpt-4o / gpt-4o-mini planned), React + Vite + Tailwind (planned).
+- `POST /api/resume` - upload `.docx` and persist parsed resume.
+- `POST /api/analyze` - run full graph for a persisted resume + JD text.
+- `GET /api/analysis/{id}` - retrieve persisted analysis payload.
+- `GET /api/analysis/{id}/resume.docx` - download tailored resume.
+- `GET /api/analysis/{id}/email` - retrieve generated cold email.
 
 ## Alignment formula (Part 3)
 

@@ -43,6 +43,7 @@ class Analysis(Base):
     jd_id: Mapped[int] = mapped_column(ForeignKey("job_descriptions.id", ondelete="CASCADE"), nullable=False, index=True)
     alignment_pct: Mapped[float] = mapped_column(Float, nullable=False)
     matched_skills: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    tailored_docx_path: Mapped[str] = mapped_column(String(1024), nullable=False, default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
 
     resume: Mapped[Resume] = relationship(back_populates="analyses")

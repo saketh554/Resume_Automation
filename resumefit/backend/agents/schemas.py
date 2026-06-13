@@ -56,6 +56,11 @@ class ProjectAuditItem(BaseModel):
     irrelevant_points: list[str] = Field(default_factory=list)
 
 
+class ColdEmailOutput(BaseModel):
+    subject: str = ""
+    body: str = ""
+
+
 class GraphState(BaseModel):
     resume_path: str = ""
     jd_text: str = ""
@@ -65,4 +70,6 @@ class GraphState(BaseModel):
     gap_bullets: list[GapBullet] = Field(default_factory=list)
     project_mappings: list[ProjectMapping] = Field(default_factory=list)
     project_audit: list[ProjectAuditItem] = Field(default_factory=list)
+    tailored_docx_path: str = ""
+    cold_email: ColdEmailOutput | None = None
     errors: list[str] = Field(default_factory=list)

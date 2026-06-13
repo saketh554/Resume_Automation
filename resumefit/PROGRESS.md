@@ -62,3 +62,33 @@
 - [x] Audit never flags contact/header block (project/experience sections only).
 - [x] Bullets use explicit `[X]%` placeholders (no fabricated concrete metrics).
 - [x] `uv run pytest -q` passes (`10 passed`).
+
+## Part 4 - Format-preserving edit + cold email (LangGraph nodes 7-8)
+
+- [x] Added `apply_edits` node and `docx_editor` service for in-place `.docx` updates.
+- [x] Added one-in-one-out behavior using in-place replacement of audited bullets before appending.
+- [x] Added post-edit assertions for heading order, style retention, and paragraph-count tolerance.
+- [x] Tailored `.docx` is saved to `data/` and path captured in graph state.
+- [x] Added `write_cold_email` node and structured cold-email output (`subject`, `body`).
+- [x] Cold email uses LLM first with grounded fallback generator.
+
+### Verification
+
+- [x] Tailored `.docx` keeps section heading order and stays within paragraph count tolerance.
+- [x] Added bullet content contains explicit `[X]%` placeholder.
+- [x] Cold email references role/company from JD (or safe fallback wording) without fabricated credentials.
+- [x] `uv run pytest -q` passes (`12 passed`).
+
+## Part 5 - Backend API + LangGraph wiring
+
+- [x] Added `POST /api/resume` for `.docx` upload + parse + persistence, returning `resume_id`.
+- [x] Added `POST /api/analyze` for `resume_id` + `jd_text` graph run + persistence.
+- [x] Added `GET /api/analysis/{id}` for persisted analysis retrieval.
+- [x] Added `GET /api/analysis/{id}/resume.docx` for tailored resume download.
+- [x] Added `GET /api/analysis/{id}/email` for cold email retrieval.
+- [x] Added request/response API schemas and service-layer persistence mapping.
+
+### Verification
+
+- [x] End-to-end API test passes: upload -> analyze -> retrieve -> download -> email.
+- [x] `uv run pytest -q` passes (`13 passed`).
